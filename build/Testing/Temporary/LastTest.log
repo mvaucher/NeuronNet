@@ -1,0 +1,36 @@
+Start testing: Oct 27 14:34 CET
+----------------------------------------------------------
+1/1 Testing: CMake_Neuronal_Network
+1/1 Test: CMake_Neuronal_Network
+Command: "/home/mvaucher/myfiles/Programmation/BA3/NeuronNet-master/build/testNeuronNet"
+Directory: /home/mvaucher/myfiles/Programmation/BA3/NeuronNet-master/build
+"CMake_Neuronal_Network" start time: Oct 27 14:34 CET
+Output:
+----------------------------------------------------------
+[==========] Running 5 tests from 3 test cases.
+[----------] Global test environment set-up.
+[----------] 1 test from simulationTest
+[ RUN      ] simulationTest.parse
+[       OK ] simulationTest.parse (0 ms)
+[----------] 1 test from simulationTest (0 ms total)
+
+[----------] 2 tests from neuronTest
+[ RUN      ] neuronTest.initialize
+[       OK ] neuronTest.initialize (0 ms)
+[ RUN      ] neuronTest.step
+[       OK ] neuronTest.step (0 ms)
+[----------] 2 tests from neuronTest (0 ms total)
+
+[----------] 2 tests from networkTest
+[ RUN      ] networkTest.initialize
+[       OK ] networkTest.initialize (1 ms)
+[ RUN      ] networkTest.connect
+<end of output>
+Test time =   0.44 sec
+----------------------------------------------------------
+Test Failed.
+"CMake_Neuronal_Network" end time: Oct 27 14:34 CET
+"CMake_Neuronal_Network" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 27 14:34 CET

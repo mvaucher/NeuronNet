@@ -43,6 +43,14 @@ bool Network::add_link(const size_t &a, const size_t &b, double str) {
     return true;
 }
 
+std::pair<size_t, double> Network::degree(const size_t& n) const{
+	double somme = 0.0 ;
+	for(auto val: neighbors(n)){
+		somme += val.second; 
+	}
+	return std::pair<size_t,double> (neighbors(n).size(), somme);
+}
+
 size_t Network::random_connect(const double &mean_deg, const double &mean_streng) {
     links.clear();
     std::vector<int> degrees(size());
@@ -62,6 +70,16 @@ size_t Network::random_connect(const double &mean_deg, const double &mean_streng
     return num_links;
 }
 
+std::vector<std::pair<size_t, double> > Network::neighbors(const size_t& n) const{
+	std::vector<std::pair<size_t,double>> vec;
+	
+	for(linkmap::const_iterator it= links.lower_bound({n,0}); it != links.cend() and ((it->first).first == n); ++it){
+		vec.push_back(std::pair<size_t,double> ((it->first).second, it->second));	
+	}
+
+	return vec;
+}
+
 std::vector<double> Network::potentials() const {
     std::vector<double> vals;
     for (size_t nn=0; nn<size(); nn++)
@@ -74,6 +92,44 @@ std::vector<double> Network::recoveries() const {
     for (size_t nn=0; nn<size(); nn++)
         vals.push_back(neurons[nn].recovery());
     return vals;
+}
+
+std::set<size_t> Network::step(const std::vector<double>& thalamic){
+	
+	std::set<size_t> are_firing;
+
+	for(size_t i(0); i < neurons.size(); ++i){
+
+		double neuron_excit_intensity (0.0);
+		double neuron_inhib_intensity (0.0);
+
+		std::vector<std::pair<size_t, double>> voisins (neighbors(i));
+		for(auto voisin: voisins){
+			if(neurons[voisin.first].firing()){
+				if(neurons[voisin.first].is_inhibitory()){
+					neuron_inhib_intensity += voisin.second;
+				}else{
+					neuron_excit_intensity += voisin.second;
+				}
+			}
+		}
+		if(neurons[i].is_inhibitory()){
+			neurons[i].input((2.0*thalamic[i])/5.0+0.5*neuron_excit_intensity + neuron_inhib_intensity); //déjà mis en négatif
+		}else{
+			neurons[i].input(thalamic[i]+0.5*neuron_excit_intensity + neuron_inhib_intensity);
+		}
+	}
+	
+	for(size_t i(0); i < neurons.size(); ++i){
+		if(neurons[i].firing()){
+			neurons[i].reset();
+			are_firing.insert(i);
+		}else{
+			neurons[i].step();
+		}
+	}
+	
+	return are_firing;
 }
 
 void Network::print_params(std::ostream *_out) {
