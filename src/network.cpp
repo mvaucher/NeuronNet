@@ -114,7 +114,7 @@ std::set<size_t> Network::step(const std::vector<double>& thalamic){
 			}
 		}
 		if(neurons[i].is_inhibitory()){
-			neurons[i].input((2.0*thalamic[i])/5.0+0.5*neuron_excit_intensity + neuron_inhib_intensity); //déjà mis en négatif
+			neurons[i].input((2.0*thalamic[i])/5.0+0.5*neuron_excit_intensity + neuron_inhib_intensity);
 		}else{
 			neurons[i].input(thalamic[i]+0.5*neuron_excit_intensity + neuron_inhib_intensity);
 		}
